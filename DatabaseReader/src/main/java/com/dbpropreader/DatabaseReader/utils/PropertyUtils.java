@@ -1,38 +1,39 @@
-/*package com.dbpropreader.DatabaseReader.utils;
+package com.dbpropreader.DatabaseReader.utils;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.stereotype.Component;
 
-@Component
-public class PropertyUtils extends PropertyPlaceholderConfigurer implements Serializable{
+public class PropertyUtils extends PropertyPlaceholderConfigurer implements Serializable {
 
-	*//**
-	 * 
-	 *//*
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-	
-	private  CustomProperties customProps;
-	
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory){
 
-for(String benName:configurableListableBeanFactory.getBeanDefinitionNames()){
-	System.out.println(benName);
-}
-		DataSource dataSource = (DataSource) configurableListableBeanFactory.getBean("datasource");
-		customProps=new CustomProperties(dataSource);
+	private static CustomProperties customProps;
+
+	private String dataSourceName;
+
+	@Override
+	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		DataSource dataSource = (DataSource) beanFactory.getBean(getDataSourceName());
+		customProps = new CustomProperties(dataSource);
 		setProperties(customProps);
-		super.postProcessBeanFactory(configurableListableBeanFactory);
-		
+		super.postProcessBeanFactory(beanFactory);
 	}
-	public  String getProperty(String name) {
+
+	public String getDataSourceName() {
+		return dataSourceName;
+	}
+
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
+	}
+
+	public static String getProperty(String name) {
 		return (null == customProps.get(name)) ? "" : customProps.get(name).toString();
 	}
 }
-*/
